@@ -1310,29 +1310,15 @@
 
   const siteMessages = [
     {
-      id: "v2-0-3-release-2026-10-08",
-      subject: "Parano1d v2.0.3 is available",
-      date: "2026-10-08T14:48:38Z",
-      preview: "v2 mandatory update before block 210,537. Proof-native contracts, new block capacity, scheduled issuance and a difficulty fix.",
+      id: "v2-live-2026-10-11",
+      subject: "Parano1d v2 is live",
+      date: "2026-10-11T06:48:53Z",
+      notify: false,
+      preview: "Proof-native contracts, programmable live rights and new block classes.",
       paragraphs: [
+        "V2 is active on mainnet. Proof-native contracts add programmable live rights and verifiable receipts for contract actions.",
+        "Small and Large block classes, a 30-second block target and scheduled issuance starting at 16 NOID per block are now live.",
         [
-          "v2 activates at block 210,537. The estimated activation time is ",
-          { strong: "October 10, 2026 at 11:59 PM PDT" },
-          " (October 11 at 06:59 UTC). Block height determines activation; the actual time depends on block production."
-        ],
-        "Nodes and GUI wallets must upgrade to v2.0.1 or newer before activation.",
-        "Parano1d v2.0.3 is now available and is the recommended release for all nodes and wallets.",
-        "New in v2.0.3: fixes excessive database growth in nodes and GUI wallets. Space already freed by pruning is reused instead of unnecessarily extending the database file. The fix applies automatically when you update and start normally.",
-        "An already oversized database file may remain large, but its free pages can be reused. To reclaim that space, you can optionally stop the node or GUI wallet completely, delete only mdbx.dat and mdbx.lck from its data directory, and start v2.0.3 to synchronize again. Keep all other files, including wallet keys, receipts and contract evidence. Normal growth of live State and permanent header indexes still uses disk space.",
-        "State synchronization: upgraded peers compress and batch small State segments within strict limits, reducing request count and data transfer. Each segment is still verified separately. On repeat syncs, the client also verifies and reuses matching State segments already on disk.",
-        "Wallet sends and consolidation now select output slots from live State segments with enough free space, reducing collisions when transactions compete for the last holes in an almost full segment.",
-        "Older and newer nodes remain compatible. They automatically negotiate the new or existing State transport, before and after activation. State sync speed depends on peer versions and network conditions.",
-        "V2 also brings proof-native smart contracts, Small and Large block classes, a 30-second block target and a scheduled issuance path beginning at 16 NOID per block. Contract funding and calls become available at activation. Keep contract terms and verifiable receipts with your wallet backup.",
-        [
-          { text: "Download Parano1d v2.0.3", href: "#downloads" },
-          " · ",
-          { text: "Release notes", href: "https://git.parano1d.org/ignotusnemo/parano1d/releases/tag/v2.0.3" },
-          " · ",
           { text: "Contract guide", href: "https://docs.parano1d.org/contracts" }
         ]
       ]
@@ -1988,10 +1974,14 @@
     try { localStorage.setItem(messageReadStorageKey, JSON.stringify([...readMessageIds])); } catch {}
   }
 
+  function messageNeedsNotification(message) {
+    return message.notify === true && !readMessageIds.has(message.id);
+  }
+
   function syncMessageBadge() {
     if (!messageCenterToggle || !messageUnreadCount) return;
     const copy = messageCenterCopy[language] || messageCenterCopy.en;
-    const unreadCount = siteMessages.filter((message) => !readMessageIds.has(message.id)).length;
+    const unreadCount = siteMessages.filter(messageNeedsNotification).length;
     messageCenterToggle.classList.toggle("has-unread", unreadCount > 0);
     messageUnreadCount.textContent = unreadCount > 9 ? "9+" : String(unreadCount);
     messageCenterToggle.setAttribute(
@@ -2007,7 +1997,7 @@
       const item = messageElement("button", "message-list-item");
       item.type = "button";
       item.dataset.messageId = message.id;
-      item.classList.toggle("is-unread", !readMessageIds.has(message.id));
+      item.classList.toggle("is-unread", messageNeedsNotification(message));
 
       const dot = messageElement("span", "message-list-dot");
       dot.setAttribute("aria-hidden", "true");
@@ -2041,11 +2031,8 @@
     messageReaderDate.dateTime = message.date;
     messageLetterBody.replaceChildren();
 
-    message.paragraphs.forEach((paragraph, index) => {
+    message.paragraphs.forEach((paragraph) => {
       const element = messageElement("p");
-      if (message.id === "v2-0-3-release-2026-10-08" && index === 0) {
-        element.classList.add("message-letter-release-intro");
-      }
       const parts = Array.isArray(paragraph) ? paragraph : [paragraph];
       parts.forEach((part) => {
         if (typeof part === "string") {
