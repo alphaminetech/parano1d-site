@@ -81,6 +81,16 @@
       "tags": ["PUBLIC POOL", "STRATUM", "TLS", "HOURLY PAYOUTS"]
     },
     {
+      "id": "alphapool",
+      "category": "pools",
+      "name": "AlphaPool",
+      "description": "Independent public NOID mining pool with PROP and SOLO modes (2% fee each), automatic payouts above 10 NOID and Stratum endpoints in the US, Europe, Asia and Russia.",
+      "maintainer": "AlphaPool",
+      "url": "https://no1d.alphapool.tech/",
+      "source": "closed",
+      "tags": ["PUBLIC POOL", "PROP", "SOLO", "STRATUM"]
+    },
+    {
       "id": "hashborn-noid-miner",
       "category": "miners",
       "name": "Hashborn NOID Miner",
