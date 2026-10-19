@@ -84,7 +84,7 @@
       "id": "alphapool",
       "category": "pools",
       "name": "AlphaPool",
-      "description": "Independent public NOID mining pool with PROP and SOLO modes (2% fee each), automatic payouts above 10 NOID and Stratum endpoints in the US, Europe, Asia and Russia.",
+      "description": "Independent public NOID mining pool with PROP and SOLO modes (1% fee each), automatic payouts and Stratum endpoints in the US, Europe, Asia and Russia.",
       "maintainer": "AlphaPool",
       "url": "https://no1d.alphapool.tech/",
       "source": "closed",
